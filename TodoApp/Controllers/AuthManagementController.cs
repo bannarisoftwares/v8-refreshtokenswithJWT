@@ -138,6 +138,11 @@ namespace TodoApp.Controllers
                         Success = false
                     });
                 }
+                
+                if (result.Errors != null && result.Errors.Count > 0)
+                {
+                    return BadRequest(result);
+                }
 
                 return Ok(result);
             }
@@ -201,6 +206,7 @@ namespace TodoApp.Controllers
             try
             {   
                 // Validation 1 - Validation JWT token format
+                _tokenValidationParams.ValidateLifetime = false;
                 var tokenInVerification = jwtTokenHandler.ValidateToken(tokenRequest.Token, _tokenValidationParams, out var validatedToken);
 
                 // Validation 2 - Validate encryption alg
